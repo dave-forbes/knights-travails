@@ -138,11 +138,11 @@ function KnightMoves2(start, end) {
         queue.push(childNode);
       }
       if (x - 2 >= 0 && y + 1 < 8) {
-        const childNode = Node([x - 1, y + 1], node);
+        const childNode = Node([x - 2, y + 1], node);
         queue.push(childNode);
       }
       if (x - 2 >= 0 && y - 1 >= 0) {
-        const childNode = Node([x - 1, y - 2], node);
+        const childNode = Node([x - 2, y - 1], node);
         queue.push(childNode);
       }
       if (x + 1 < 8 && y - 2 >= 0) {
@@ -170,7 +170,9 @@ function KnightMoves2(start, end) {
     generatePath(node.path);
   })(finalNode);
 
+  console.log(visited);
+
   return finalPath;
 }
 
-console.log(KnightMoves2([0, 0], [3, 3]));
+console.log(KnightMoves2([0, 0], [7, 6]));
