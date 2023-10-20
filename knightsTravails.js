@@ -110,19 +110,21 @@
 // node21.path.push([2, 1]);
 // console.log(node21);
 
-function Node([x, y], path = null) {
-  return { x, y, path };
-}
-
 function KnightMoves2(start, end) {
-  if (start[0] > end[0] && start[1] > end[1]) {
-    return KnightMoves2(end, start);
+  function Node([x, y], path = null) {
+    return { x, y, path };
   }
+
+  if (start[0] > end[0] && start[1] > end[1]) {
+    const result = KnightMoves2(end, start);
+    return result.reverse();
+  }
+
   const startNode = Node(start);
   const queue = [startNode];
   const visited = [];
-  const a = end[0];
-  const b = end[1];
+  const targetX = end[0];
+  const targetY = end[1];
 
   function alreadyVisited(node, array) {
     return array.some((visitedNode) => {
@@ -130,77 +132,49 @@ function KnightMoves2(start, end) {
     });
   }
 
-  function recursion(node) {
-    console.log(queue);
-    const x = node.x;
-    const y = node.y;
-    if (x === a && y === b) {
-      return node;
+  function addChildNode(offsetx, offsety, currentNode) {
+    const resultX = currentNode.x + offsetx;
+    const resultY = currentNode.y + offsety;
+    const childNode = Node([resultX, resultY], currentNode);
+    if (
+      resultX >= 0 &&
+      resultX < 8 &&
+      resultY >= 0 &&
+      resultY < 8 &&
+      !alreadyVisited(childNode, visited) &&
+      !alreadyVisited(childNode, queue)
+    )
+      queue.push(childNode);
+  }
+
+  const possibleMoves = [
+    [-2, -1],
+    [-1, -2],
+    [-2, 1],
+    [-1, 2],
+    [1, 2],
+    [2, 1],
+    [2, -1],
+    [1, -2],
+  ];
+
+  let finalNode = null;
+
+  while (finalNode === null) {
+    let currentNode = queue[0];
+    if (currentNode.x === targetX && currentNode.y === targetY) {
+      finalNode = currentNode;
+      break;
     } else {
       const visitedNode = queue.shift();
       visited.push(visitedNode);
-      if (x - 2 >= 0 && y - 1 >= 0) {
-        const childNode = Node([x - 2, y - 1], node);
-        if (
-          !alreadyVisited(childNode, visited) &&
-          !alreadyVisited(childNode, queue)
-        )
-          queue.push(childNode);
-      }
-      if (x + 1 < 8 && y + 2 < 8) {
-        const childNode = Node([x + 1, y + 2], node);
-        if (
-          !alreadyVisited(childNode, visited) &&
-          !alreadyVisited(childNode, queue)
-        )
-          queue.push(childNode);
-      }
-      if (x - 1 >= 0 && y + 2 < 8) {
-        const childNode = Node([x - 1, y + 2], node);
-        if (
-          !alreadyVisited(childNode, visited) &&
-          !alreadyVisited(childNode, queue)
-        )
-          queue.push(childNode);
-      }
-      if (x - 2 >= 0 && y + 1 < 8) {
-        const childNode = Node([x - 2, y + 1], node);
-        if (
-          !alreadyVisited(childNode, visited) &&
-          !alreadyVisited(childNode, queue)
-        )
-          queue.push(childNode);
-      }
-      if (x + 1 < 8 && y - 2 >= 0) {
-        const childNode = Node([x + 1, y - 2], node);
-        if (
-          !alreadyVisited(childNode, visited) &&
-          !alreadyVisited(childNode, queue)
-        )
-          queue.push(childNode);
-      }
-      if (x + 2 < 8 && y - 1 >= 0) {
-        const childNode = Node([x + 2, y - 1], node);
-        if (
-          !alreadyVisited(childNode, visited) &&
-          !alreadyVisited(childNode, queue)
-        )
-          queue.push(childNode);
-      }
-      if (x + 2 < 8 && y + 1 < 8) {
-        const childNode = Node([x + 2, y + 1], node);
-        if (
-          !alreadyVisited(childNode, visited) &&
-          !alreadyVisited(childNode, queue)
-        )
-          queue.push(childNode);
-      }
-      return recursion(queue[0]);
+      possibleMoves.forEach((move) => {
+        addChildNode(move[0], move[1], currentNode);
+      });
     }
   }
-  const finalNode = recursion(startNode);
 
-  const finalPath = [];
+  let finalPath = [];
 
   (function generatePath(node) {
     if (node === null) return;
@@ -211,4 +185,4 @@ function KnightMoves2(start, end) {
   return finalPath;
 }
 
-console.log(KnightMoves2([3, 3], [0, 0]));
+console.log(KnightMoves2([0, 0], [4, 6]));
