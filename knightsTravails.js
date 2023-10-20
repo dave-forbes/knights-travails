@@ -20,7 +20,7 @@ function addChildNode(offsetx, offsety, currentNode, visited, queue) {
     queue.push(childNode);
 }
 
-function generatePath(node, path) {
+function generatePath(node, path = []) {
   if (node === null) return path;
   path.unshift([node.x, node.y]);
   return generatePath(node.path, path);
@@ -59,9 +59,7 @@ function KnightMoves(start, end) {
     }
   }
 
-  let finalPath = [];
-
-  return generatePath(finalNode, finalPath);
+  return generatePath(finalNode);
 }
 
-console.log(KnightMoves([0, 0], [3, 3]));
+console.log(KnightMoves([7, 7], [3, 3]));
