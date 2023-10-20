@@ -115,13 +115,23 @@ function Node([x, y], path = null) {
 }
 
 function KnightMoves2(start, end) {
+  if (start[0] > end[0] && start[1] > end[1]) {
+    return KnightMoves2(end, start);
+  }
   const startNode = Node(start);
   const queue = [startNode];
   const visited = [];
   const a = end[0];
   const b = end[1];
 
+  function alreadyVisited(node, array) {
+    return array.some((visitedNode) => {
+      return node.x === visitedNode.x && node.y === visitedNode.y;
+    });
+  }
+
   function recursion(node) {
+    console.log(queue);
     const x = node.x;
     const y = node.y;
     if (x === a && y === b) {
@@ -129,33 +139,61 @@ function KnightMoves2(start, end) {
     } else {
       const visitedNode = queue.shift();
       visited.push(visitedNode);
+      if (x - 2 >= 0 && y - 1 >= 0) {
+        const childNode = Node([x - 2, y - 1], node);
+        if (
+          !alreadyVisited(childNode, visited) &&
+          !alreadyVisited(childNode, queue)
+        )
+          queue.push(childNode);
+      }
       if (x + 1 < 8 && y + 2 < 8) {
         const childNode = Node([x + 1, y + 2], node);
-        queue.push(childNode);
+        if (
+          !alreadyVisited(childNode, visited) &&
+          !alreadyVisited(childNode, queue)
+        )
+          queue.push(childNode);
       }
       if (x - 1 >= 0 && y + 2 < 8) {
         const childNode = Node([x - 1, y + 2], node);
-        queue.push(childNode);
+        if (
+          !alreadyVisited(childNode, visited) &&
+          !alreadyVisited(childNode, queue)
+        )
+          queue.push(childNode);
       }
       if (x - 2 >= 0 && y + 1 < 8) {
         const childNode = Node([x - 2, y + 1], node);
-        queue.push(childNode);
-      }
-      if (x - 2 >= 0 && y - 1 >= 0) {
-        const childNode = Node([x - 2, y - 1], node);
-        queue.push(childNode);
+        if (
+          !alreadyVisited(childNode, visited) &&
+          !alreadyVisited(childNode, queue)
+        )
+          queue.push(childNode);
       }
       if (x + 1 < 8 && y - 2 >= 0) {
         const childNode = Node([x + 1, y - 2], node);
-        queue.push(childNode);
+        if (
+          !alreadyVisited(childNode, visited) &&
+          !alreadyVisited(childNode, queue)
+        )
+          queue.push(childNode);
       }
       if (x + 2 < 8 && y - 1 >= 0) {
         const childNode = Node([x + 2, y - 1], node);
-        queue.push(childNode);
+        if (
+          !alreadyVisited(childNode, visited) &&
+          !alreadyVisited(childNode, queue)
+        )
+          queue.push(childNode);
       }
       if (x + 2 < 8 && y + 1 < 8) {
         const childNode = Node([x + 2, y + 1], node);
-        queue.push(childNode);
+        if (
+          !alreadyVisited(childNode, visited) &&
+          !alreadyVisited(childNode, queue)
+        )
+          queue.push(childNode);
       }
       return recursion(queue[0]);
     }
@@ -170,9 +208,7 @@ function KnightMoves2(start, end) {
     generatePath(node.path);
   })(finalNode);
 
-  console.log(visited);
-
   return finalPath;
 }
 
-console.log(KnightMoves2([0, 0], [7, 6]));
+console.log(KnightMoves2([3, 3], [0, 0]));
