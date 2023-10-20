@@ -47,13 +47,12 @@ function KnightMoves(start, end) {
   let finalNode = null;
 
   while (finalNode === null) {
-    let currentNode = queue[0];
+    let currentNode = queue.shift();
+    visited.add(`${currentNode.x},${currentNode.y}`);
     if (currentNode.x === targetX && currentNode.y === targetY) {
       finalNode = currentNode;
       break;
     } else {
-      const visitedNode = queue.shift();
-      visited.add(`${visitedNode.x},${visitedNode.y}`);
       possibleMoves.forEach((move) => {
         addChildNode(move[0], move[1], currentNode, visited, queue);
       });
@@ -65,4 +64,4 @@ function KnightMoves(start, end) {
   return generatePath(finalNode, finalPath);
 }
 
-console.log(KnightMoves([7, 3], [0, 2]));
+console.log(KnightMoves([0, 0], [3, 3]));
